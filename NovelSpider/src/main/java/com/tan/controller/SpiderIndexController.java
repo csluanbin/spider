@@ -26,6 +26,8 @@ public class SpiderIndexController {
 	private HtmlExtractServiceImple htmlservice;
 	@Autowired 
 	private ServletContext servletContext;
+	@Autowired 
+	private HttpServletRequest request;
 	
 	@RequestMapping
 	public ModelAndView add(@RequestParam(value = "url") String url, @RequestParam(value = "encode") String encode){
@@ -34,12 +36,12 @@ public class SpiderIndexController {
 		String str;
 		try 
 		{
-			//String url="http://www.23wx.com/html/12/12217/";
-			//String encode="gbk";
 			str = htmlservice.ExtractFromUrl(url, encode);
-			String[] strs=new String[1];
-			strs[0]="a";
-			List<Node> list=htmlservice.GetNode(str, "L", strs, "class");
+			
+			String top_elements=request.getParameter("top_elements");
+			String[] strs=top_elements.split(";");
+			
+			List<Node> list=htmlservice.GetNode(str, request.getParameter("top_tag"), strs, request.getParameter("top"));
 			int len=list.size();
 			int num=(len/5);
 			if((len%5)!=0)
@@ -49,8 +51,27 @@ public class SpiderIndexController {
 			mav.addObject("num", num);
 			mav.addObject("size", len);
 			mav.addObject("list", list);
+			
+			String next_elements=request.getParameter("next_elements");
+			String[] next_strs=next_elements.split(";");
+			String next_tag=request.getParameter("next_tag");
+			String next_id=request.getParameter("next");
+			
 			servletContext.setAttribute("query_list", list);
 			servletContext.setAttribute("url", url);
+			servletContext.setAttribute("next_id", next_id);
+			servletContext.setAttribute("next_tag", next_tag);
+			servletContext.setAttribute("encode", encode);
+			
+			if((next_elements==null)||(next_elements.trim().isEmpty()))
+			{
+				servletContext.setAttribute("next_elements", new String[0]);
+			}
+			else
+			{
+				servletContext.setAttribute("next_elements", next_elements.split(";"));
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

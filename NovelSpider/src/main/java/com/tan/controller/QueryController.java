@@ -30,12 +30,12 @@ public class QueryController {
 		List<Node> list=(List<Node>) servletContext.getAttribute("query_list");
 		ModelAndView mav = new ModelAndView("query");
 		String url=servletContext.getAttribute("url")+list.get(id).getLink();
-		String encode="gbk";
+		String encode=(String) servletContext.getAttribute("encode");
 		try 
 		{
 			String str = htmlservice.ExtractFromUrl(url, encode);
 			String[] strs=new String[0];
-			List<Node> nodes=htmlservice.GetNode(str, "contents", strs, "id");
+			List<Node> nodes=htmlservice.GetNode(str, (String)servletContext.getAttribute("next_tag"), (String[])servletContext.getAttribute("next_elements"), (String)servletContext.getAttribute("next_id"));
 			String content="";
 			for(Node node:nodes)
 			{

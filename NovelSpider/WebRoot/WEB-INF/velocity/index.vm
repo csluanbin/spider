@@ -1,10 +1,39 @@
 <html>  
 <body>  
-<h2>Add Book</h2>  
-<form method="post" action="/springmvc/spiderindex.do?method=add">  
-url:<input type="text" name="url" id="url">  
-encode:<input type="text" name="encode" id="encode">  
-<input type="submit" value="Add">
-</form>  
+<h2>Add Book</h2>
+<div>
+	<form method="post" action="/springmvc/spiderindex.do?method=add">
+		<div>
+			url:<input type="text" name="url" id="url">  
+			encode:<input type="text" name="encode" id="encode">
+		</div>
+		<div>
+			首页
+			<select name="top">
+				<option value="class">class</option>
+				<option value="id">id</option>
+			</select>
+			root tag:<input type="text" name="top_tag" id="top_tag">  
+			elements:<input type="text" name="top_elements" id="top_elements">
+		</div>
+		<div>
+			子频道页
+			<select name="next">
+				<option value="class">class</option>
+				<option value="id">id</option>
+			</select>
+			root tag:<input type="text" name="next_tag" id="next_tag">  
+			elements:<input type="text" name="next_elements" id="next_elements">
+		</div>
+		<input type="submit" value="Add">
+		<!--<select>
+			<option value="class">class</option>
+			<option value="id">id</option>
+		</select>
+		root tag:<input type="text" name="url" id="url">  
+		element:<input type="text" name="encode" id="encode">
+		<input type="submit" value="Add">-->
+	</form>
+</div>
 </body>  
 </html>

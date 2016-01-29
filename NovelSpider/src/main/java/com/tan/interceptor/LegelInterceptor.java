@@ -33,6 +33,7 @@ public class LegelInterceptor implements HandlerInterceptor {
 		System.out.println("---preHandle---");
 		String url=request.getParameter("url");
 		String encode=request.getParameter("encode");
+		boolean flag=false;
 		if(session==null)
 		{
 			System.out.println("---session==null---");
@@ -41,7 +42,15 @@ public class LegelInterceptor implements HandlerInterceptor {
 		{
 			session.setAttribute("login", false);
 		}
-		if(((StringUtil.ifempty(url))||StringUtil.ifempty(encode)))
+		else
+		{
+			flag=(boolean) session.getAttribute("login");
+		}
+		if(flag)
+		{
+			return true;
+		}
+		if((StringUtil.ifempty(url))||StringUtil.ifempty(encode))
 		{
 			System.out.println("---Redirect---");
 			response.sendRedirect("/springmvc/index.do");
