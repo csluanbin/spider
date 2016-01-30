@@ -1,6 +1,8 @@
 package com.tan.controller;
 
+import com.tan.model.Next;
 import com.tan.model.Node;
+import com.tan.model.Root;
 
 import java.util.List;
 
@@ -9,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tan.model.Book;
 import com.tan.tool.HtmlExtractServiceImple;
 
 @Controller
@@ -29,19 +33,29 @@ public class SpiderIndexController {
 	@Autowired 
 	private HttpServletRequest request;
 	
+	@InitBinder("root")  
+    public void initBinder1(WebDataBinder binder) {  
+		binder.setFieldDefaultPrefix("root.");  
+    }
+	@InitBinder("next")  
+    public void initBinder2(WebDataBinder binder) {  
+		binder.setFieldDefaultPrefix("next.");  
+    }
+	
 	@RequestMapping
-	public ModelAndView add(@RequestParam(value = "url") String url, @RequestParam(value = "encode") String encode){
-		System.out.println("this is spiderindex");
+	public ModelAndView Add(@ModelAttribute("root") Root root, @ModelAttribute("next") Next next){
+		//System.out.println(root.toString());
+		//System.out.println(next.toString());
 		ModelAndView mav = new ModelAndView("spider");
 		String str;
 		try 
 		{
-			str = htmlservice.ExtractFromUrl(url, encode);
+			str = htmlservice.ExtractFromUrl(root.getUrl(), root.getEncode());
 			
-			String top_elements=request.getParameter("top_elements");
+			String top_elements=root.getElements();
 			String[] strs=top_elements.split(";");
 			
-			List<Node> list=htmlservice.GetNode(str, request.getParameter("top_tag"), strs, request.getParameter("top"));
+			List<Node> list=htmlservice.GetNode(str, root.getTag(), strs, root.getType());
 			int len=list.size();
 			int num=(len/5);
 			if((len%5)!=0)
@@ -52,16 +66,15 @@ public class SpiderIndexController {
 			mav.addObject("size", len);
 			mav.addObject("list", list);
 			
-			String next_elements=request.getParameter("next_elements");
-			String[] next_strs=next_elements.split(";");
-			String next_tag=request.getParameter("next_tag");
-			String next_id=request.getParameter("next");
+			String next_elements=next.getElements();
+			String next_tag=next.getTag();
+			String next_id=next.getType();
 			
 			servletContext.setAttribute("query_list", list);
-			servletContext.setAttribute("url", url);
+			servletContext.setAttribute("url", root.getUrl());
 			servletContext.setAttribute("next_id", next_id);
 			servletContext.setAttribute("next_tag", next_tag);
-			servletContext.setAttribute("encode", encode);
+			servletContext.setAttribute("encode", root.getEncode());
 			
 			if((next_elements==null)||(next_elements.trim().isEmpty()))
 			{

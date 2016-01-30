@@ -4,26 +4,26 @@
 <div>
 	<form method="post" action="/springmvc/spiderindex.do">
 		<div>
-			url:<input type="text" name="url" id="url">  
-			encode:<input type="text" name="encode" id="encode">
+			url:<input type="text" name="root.url" id="url">  
+			encode:<input type="text" name="root.encode" id="encode">
 		</div>
 		<div>
 			首页
-			<select name="top">
+			<select name="root.type">
 				<option value="class">class</option>
 				<option value="id">id</option>
 			</select>
-			root tag:<input type="text" name="top_tag" id="top_tag">  
-			elements:<input type="text" name="top_elements" id="top_elements">
+			root tag:<input type="text" name="root.tag" id="top_tag">  
+			elements:<input type="text" name="root.elements" id="top_elements">
 		</div>
 		<div>
 			子频道页
-			<select name="next">
+			<select name="next.type">
 				<option value="class">class</option>
 				<option value="id">id</option>
 			</select>
-			root tag:<input type="text" name="next_tag" id="next_tag">  
-			elements:<input type="text" name="next_elements" id="next_elements">
+			root tag:<input type="text" name="next.tag" id="next_tag">  
+			elements:<input type="text" name="next.elements" id="next_elements">
 		</div>
 		<input type="submit" value="Add">
 		<!--<select>
